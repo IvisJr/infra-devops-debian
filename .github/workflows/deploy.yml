@@ -1,1 +1,34 @@
+name: Conexao Azure VM
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar Servidor Web Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          script: |
+            echo "Atualizando os pacotes do Debian..."
+            sudo apt-get update -y
+            
+            echo "Instalando o Nginx..."
+            sudo apt-get install nginx -y
+            
+            echo "Garantindo que o Nginx inicie com o sistema..."
+            sudo systemctl enable nginx
+            sudo systemctl start nginx
+            
+            echo "Instalação concluída! Status do serviço:"
+            sudo systemctl status nginx --no-pager
