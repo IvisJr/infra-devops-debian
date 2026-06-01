@@ -18,6 +18,8 @@ jobs:
           host: ${{ secrets.AZURE_HOST }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
+          script_stop: true
+          ssh_strict:false
           script: |
             # Copia o arquivo docker-compose.yml para a máquina, se necessário
             # Ou você pode usar o docker-compose direto se o arquivo já estiver lá
